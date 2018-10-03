@@ -13,6 +13,8 @@ const (
 	majorMatchIdentifier = "0"
 	minorMatchIdentifier = "x"
 	noMatchIdentifier    = "."
+	rowLabelDelimiter    = "||"
+	colLabelDelimiter    = "="
 )
 
 // Alignment holds two protein sequences and optionally
@@ -98,20 +100,27 @@ func (a *Alignment) Plot(title string) error {
 	fmt.Printf("alignment plot, v0.0.1\n%s\n", title)
 
 	// print column labels (i.e. sequence B)
-	fmt.Printf("  ")
+	fmt.Printf("    ") /* some padding */
 	for _, val := range a.SeqB {
 		fmt.Printf("%s ", string(val))
 	}
-	fmt.Println()
+	fmt.Println() /* new line */
+
+	// print a delimiter between column labels and data
+	fmt.Printf("  %s", colLabelDelimiter) /* some padding */
+	for i, l := 0, len(a.SeqB); i < l; i++ {
+		fmt.Printf("%s%s", colLabelDelimiter, colLabelDelimiter)
+	}
+	fmt.Println() /* new line */
 
 	// iterate over rows and columns and print them to
 	// stdout (row labels are equal to sequence A)
 	for i, lenA := 0, len(a.SeqA); i < lenA; i++ {
 		for j, lenB := 0, len(a.SeqB); j < lenB; j++ {
 			// for the first element in every row,
-			// also print the row label
+			// also print the row label and a delimiter
 			if j == 0 {
-				fmt.Printf("%s ", string(a.SeqA[i]))
+				fmt.Printf("%s %s", string(a.SeqA[i]), rowLabelDelimiter)
 			}
 
 			// if a certain element is a match,
