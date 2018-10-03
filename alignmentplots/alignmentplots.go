@@ -100,14 +100,14 @@ func (a *Alignment) Plot(title string) error {
 	fmt.Printf("alignment plot, v0.0.1\n%s\n", title)
 
 	// print column labels (i.e. sequence B)
-	fmt.Printf("    ") /* some padding */
+	fmt.Printf("      ") /* some padding */
 	for _, val := range a.SeqB {
 		fmt.Printf("%s ", string(val))
 	}
 	fmt.Println() /* new line */
 
 	// print a delimiter between column labels and data
-	fmt.Printf("  %s", colLabelDelimiter) /* some padding */
+	fmt.Printf("   \\\\") /* some padding */
 	for i, l := 0, len(a.SeqB); i < l; i++ {
 		fmt.Printf("%s%s", colLabelDelimiter, colLabelDelimiter)
 	}
@@ -120,7 +120,7 @@ func (a *Alignment) Plot(title string) error {
 			// for the first element in every row,
 			// also print the row label and a delimiter
 			if j == 0 {
-				fmt.Printf("%s %s", string(a.SeqA[i]), rowLabelDelimiter)
+				fmt.Printf(" %s %s ", string(a.SeqA[i]), rowLabelDelimiter)
 			}
 
 			// if a certain element is a match,
@@ -131,26 +131,26 @@ func (a *Alignment) Plot(title string) error {
 				// print appropriate ascii characters
 				switch {
 				case (i == 0) && (j == 0):
-					printMajor()
+					printWithDelimiter(majorMatchIdentifier, color.BgRed)
 				case (i == 0) || (j == 0):
 					if a.AlignmentMatrix[i+1][j+1] {
-						printMajor()
+						printWithDelimiter(majorMatchIdentifier, color.BgRed)
 					} else {
-						printMinor()
+						printWithDelimiter(minorMatchIdentifier, color.BgBlue)
 					}
 				case (i == (lenA - 1)) && (j == (lenB - 1)):
-					printMajor()
+					printWithDelimiter(majorMatchIdentifier, color.BgRed)
 				case (i == (lenA - 1)) || (j == (lenB - 1)):
 					if a.AlignmentMatrix[i-1][j-1] {
-						printMajor()
+						printWithDelimiter(majorMatchIdentifier, color.BgRed)
 					} else {
-						printMinor()
+						printWithDelimiter(minorMatchIdentifier, color.BgBlue)
 					}
 				case (a.AlignmentMatrix[i-1][j-1]) ||
 					(a.AlignmentMatrix[i+1][j+1]):
-					printMajor()
+					printWithDelimiter(majorMatchIdentifier, color.BgRed)
 				default:
-					printMinor()
+					printWithDelimiter(minorMatchIdentifier, color.BgBlue)
 				}
 			} else {
 				fmt.Printf("%v ", noMatchIdentifier)
@@ -161,16 +161,9 @@ func (a *Alignment) Plot(title string) error {
 	return nil
 }
 
-func printMajor() {
-	color.Set(color.BgRed, color.Bold)
-	fmt.Printf("%v", majorMatchIdentifier)
-	color.Unset()
-	fmt.Printf(" ")
-}
-
-func printMinor() {
-	color.Set(color.BgBlue)
-	fmt.Printf("%v", minorMatchIdentifier)
+func printWithDelimiter(delim string, col color.Attribute) {
+	color.Set(col, color.Bold)
+	fmt.Printf("%v", delim)
 	color.Unset()
 	fmt.Printf(" ")
 }
