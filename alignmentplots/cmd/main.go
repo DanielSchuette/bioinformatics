@@ -7,8 +7,8 @@ import (
 func main() {
 	// create an `Alignment' struct
 	align := &alignmentplots.Alignment{
-		SeqA: "ASGJKKFSDJKJS",
-		SeqB: "ASGJKDSDFLALSKDKDKALSLKDSLKSD",
+		SeqA: "ASDFJJKSKALSKSKDJSKASKD",
+		SeqB: "ASDFJHHJKSKALSKSGKDJSKAHSKD",
 	}
 
 	// align the two input sequences `SeqA' and `SeqB'

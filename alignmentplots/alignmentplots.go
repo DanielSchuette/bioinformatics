@@ -1,6 +1,18 @@
 package alignmentplots
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/fatih/color"
+)
+
+// package-level constants that determine certain
+// behaviors of e.g. the plotting functionality
+const (
+	majorMatchIdentifier = "0"
+	minorMatchIdentifier = "x"
+	noMatchIdentifier    = "."
+)
 
 // Alignment holds two protein sequences and optionally
 // their alignment matrix
@@ -95,12 +107,54 @@ func (a *Alignment) Plot(title string) {
 			if j == 0 {
 				fmt.Printf("%s ", string(a.SeqA[i]))
 			}
+
+			// if a certain element is a match,
+			// decide what to do
 			if a.AlignmentMatrix[i][j] {
-				fmt.Printf("0 ")
+				// determine whether the match is on a main
+				// diagonal while considering edge cases
+				// print appropriate ascii characters
+				switch {
+				case (i == 0) && (j == 0):
+					printMajor()
+				case (i == 0) || (j == 0):
+					if a.AlignmentMatrix[i+1][j+1] {
+						printMajor()
+					} else {
+						printMinor()
+					}
+				case (i == (lenA - 1)) && (j == (lenB - 1)):
+					printMajor()
+				case (i == (lenA - 1)) || (j == (lenB - 1)):
+					if a.AlignmentMatrix[i-1][j-1] {
+						printMajor()
+					} else {
+						printMinor()
+					}
+				case (a.AlignmentMatrix[i-1][j-1]) ||
+					(a.AlignmentMatrix[i+1][j+1]):
+					printMajor()
+				default:
+					printMinor()
+				}
 			} else {
-				fmt.Printf(". ")
+				fmt.Printf("%v ", noMatchIdentifier)
 			}
 		}
 		fmt.Println()
 	}
+}
+
+func printMajor() {
+	color.Set(color.BgRed, color.Bold)
+	fmt.Printf("%v", majorMatchIdentifier)
+	color.Unset()
+	fmt.Printf(" ")
+}
+
+func printMinor() {
+	color.Set(color.BgBlue)
+	fmt.Printf("%v", minorMatchIdentifier)
+	color.Unset()
+	fmt.Printf(" ")
 }
