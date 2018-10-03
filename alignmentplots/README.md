@@ -36,9 +36,12 @@ func main() {
 }
 ```
 
-Generates the following output:
+This program generates the following output:
 
-![Command Line Plot](assets/command_line_plot_example.png)
+<img src="assets/command_line_plot_example.png" align="center" height="48">
+
+Matching residues are represented by certain characters (`0` for matches that lie within the main diagonal or have at least one diagonal neighbor and `x` for matches that are not associated with a sequence of at least two diagonal matches) and are color-coded.
+
 
 
 ## License
