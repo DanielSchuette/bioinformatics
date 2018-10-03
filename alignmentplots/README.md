@@ -19,7 +19,7 @@ func main() {
 	// create an `Alignment' struct
 	align := &alignmentplots.Alignment{
 		SeqA: "MEEPQSDPSVEPPLSQET",   /* human TP53 AA 1-18 */
-		SeqB: "EPQSDPSVEPPLSQETFSDL", /* human TP53 AA 3 - 22 */
+		SeqB: "EPQSDPSVEPPLSQETFSDL", /* human TP53 AA 3-22 */
 	}
 
 	// plot the resulting struct
@@ -38,7 +38,7 @@ func main() {
 
 This program generates the following output:
 
-<img src="assets/command_line_plot_example.png" align="center" height="260">
+<img src="assets/command_line_plot_example.png" align="center" height="420">
 
 Matching residues are represented by certain characters (`0` for matches that lie within the main diagonal or have at least one diagonal neighbor and `x` for matches that are not associated with a sequence of at least two diagonal matches) and are color-coded.
 
