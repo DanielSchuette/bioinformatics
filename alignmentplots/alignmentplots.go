@@ -1,6 +1,7 @@
 package alignmentplots
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/fatih/color"
@@ -87,7 +88,12 @@ func (a *Alignment) Align() {
 
 // Plot creates a dot plot that visualizes the alignment
 // of two protein sequences
-func (a *Alignment) Plot(title string) {
+func (a *Alignment) Plot(title string) error {
+	// check input validity
+	if (len(a.AlignmentMatrix) == 0) ||
+		(len(a.AlignmentMatrix[0]) == 0) {
+		return errors.New("alignmentplots error: compute an alignment matrix first")
+	}
 	// print a header for the plot
 	fmt.Printf("alignment plot, v0.0.1\n%s\n", title)
 
@@ -143,6 +149,7 @@ func (a *Alignment) Plot(title string) {
 		}
 		fmt.Println()
 	}
+	return nil
 }
 
 func printMajor() {

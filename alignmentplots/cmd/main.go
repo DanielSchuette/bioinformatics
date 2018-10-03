@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/DanielSchuette/bioinformatics/alignmentplots"
 )
 
@@ -11,10 +14,15 @@ func main() {
 		SeqB: "ASDFJHHJKSKALSKSGKDJSKAHSKD",
 	}
 
+	// plot the resulting struct
+	fmt.Println(align)
+
 	// align the two input sequences `SeqA' and `SeqB'
 	align.Align()
-	// fmt.Println(align)
 
 	// plot the alignment
-	align.Plot("My First Alignment Plot")
+	err := align.Plot("My First Alignment Plot")
+	if err != nil {
+		log.Fatalf("error while plotting: %v\n", err)
+	}
 }
