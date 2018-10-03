@@ -18,8 +18,8 @@ import (
 func main() {
 	// create an `Alignment' struct
 	align := &alignmentplots.Alignment{
-		SeqA: "ASDFJJKSKALSKSKDJSKASKD",
-		SeqB: "ASDFJHHJKSKALSKSGKDJSKAHSKD",
+		SeqA: "MEEPQSDPSVEPPLSQET",   /* human TP53 AA 1-18 */
+		SeqB: "EPQSDPSVEPPLSQETFSDL", /* human TP53 AA 3 - 22 */
 	}
 
 	// plot the resulting struct
@@ -35,6 +35,11 @@ func main() {
 	}
 }
 ```
+
+Generates the following output:
+
+![Command Line Plot](assets/command_line_plot_example.png)
+
 
 ## License
 
