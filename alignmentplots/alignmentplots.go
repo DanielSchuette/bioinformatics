@@ -10,6 +10,10 @@ import (
 // package-level constants that determine certain
 // behaviors of e.g. the plotting functionality
 const (
+	// returns the current version of `alignmentplots'
+	Version = "0.0.1"
+
+	// constants that are used internally
 	majorMatchIdentifier = "0"
 	minorMatchIdentifier = "x"
 	noMatchIdentifier    = "."
@@ -97,7 +101,7 @@ func (a *Alignment) Plot(title string) error {
 		return errors.New("alignmentplots error: compute an alignment matrix first")
 	}
 	// print a header for the plot
-	fmt.Printf("alignment plot, v0.0.1\n%s\n", title)
+	fmt.Printf("alignment plot, v%s\n%s\n", Version, title)
 
 	// print column labels (i.e. sequence B)
 	fmt.Printf("      ") /* some padding */
