@@ -9,7 +9,7 @@ All code in this repository is work in progress!
 ## Packages
 
 1. alignmentplots:
-`alignmentplots` visualizes the relationship between two nucleotide of amino acid sequences.
+`alignmentplots` visualizes the relationship between two nucleotide or amino acid sequences.
 
 2. dataframe:
 `dataframe` implements a basic dataframe.
