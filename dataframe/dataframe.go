@@ -1,6 +1,9 @@
 package dataframe
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 // Package-level constants that determine certain
 // behaviors. Most constants are not exposed to
@@ -9,11 +12,20 @@ const (
 	Version = "0.0.1"
 )
 
-type typeError struct {
+// an `errString' is returned whenever a float
+// or integer but not string is expected by a
+// method or function
+var errString = errors.New("must be float or integer, not string")
+
+// an `errType' is returned whenever a type
+// is used in the wrong context (e.g. a type
+// other than int64, float64, string to
+// initialize an `Array')
+type errType struct {
 	t interface{}
 }
 
-func (e *typeError) Error() string {
+func (e *errType) Error() string {
 	return fmt.Sprintf("dataframe: don't know type %T", e.t)
 }
 
@@ -30,7 +42,7 @@ type Array struct {
 	// `Type' returns the `Array' type
 	// at this point, an `Array' can be
 	// of type "integer" (int64), "float"
-	// (float64), and "str" (string)
+	// (float64), and "string" (string)
 	Type string
 
 	// data holds the actual data of the
@@ -38,9 +50,9 @@ type Array struct {
 	data interface{}
 }
 
-// NewArray returns a new Array. If `data' is
-// empty, the resulting array will be empty as
-// well.
+// NewArray returns a new Array. `data' must be
+// a slice of either int64, float64, or string,
+// otherwise an error is returned to the caller.
 func NewArray(data interface{}) (*Array, error) {
 	a := &Array{}
 
@@ -51,7 +63,7 @@ func NewArray(data interface{}) (*Array, error) {
 		a.Type = "integer"
 		d, ok := data.([]int64)
 		if !ok {
-			return nil, &typeError{v}
+			return nil, &errType{v}
 		}
 		a.data = d
 		a.Len = len(d)
@@ -59,20 +71,20 @@ func NewArray(data interface{}) (*Array, error) {
 		a.Type = "float"
 		d, ok := data.([]float64)
 		if !ok {
-			return nil, &typeError{v}
+			return nil, &errType{v}
 		}
 		a.data = d
 		a.Len = len(d)
 	case []string:
-		a.Type = "str"
+		a.Type = "string"
 		d, ok := data.([]string)
 		if !ok {
-			return nil, &typeError{v}
+			return nil, &errType{v}
 		}
 		a.data = d
 		a.Len = len(d)
 	default:
-		return nil, &typeError{v}
+		return nil, &errType{v}
 	}
 
 	return a, nil
@@ -92,4 +104,18 @@ type Dataframe struct {
 	// `columns' holds the actual data
 	// every element must be of `Array' type
 	columns map[string]Array
+}
+
+// NewDataframe returns a new `Dataframe'. A slice
+// of `Array' is expected as an input, along with a
+// slice of column names of the same length. Further,
+// all elements in `arr' must be of the same length.
+// Otherwise, an error is returned to the caller.
+func NewDataframe(arr []*Array, names []string) (*Dataframe, error) {
+	if len(arr) != len(names) {
+		return nil, nil
+		// TODO
+	}
+	return nil, nil
+	// TODO
 }
