@@ -5,6 +5,10 @@ import (
 	"image/color"
 	"image/png"
 	"io"
+
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/basicfont"
+	"golang.org/x/image/math/fixed"
 )
 
 // Canvas is the basis for all other drawing
@@ -84,4 +88,19 @@ func (c *Canvas) Rectangle(x0, y0, x1, y1, thick int, out *color.RGBA) {
 			c.Set(x1-t, y, out)
 		}
 	}
+}
+
+// AddLabel adds a `label' at a certain `x' and `y' position
+// of a `Canvas'. Currently, only a fixed-size font is
+// implemented (`basicfont.Face7x13').
+func (c *Canvas) AddLabel(x, y int, label string, col *color.RGBA) {
+	point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
+	face := basicfont.Face7x13 /* fixed-size font */
+	d := &font.Drawer{
+		Dst:  c,
+		Src:  image.NewUniform(col),
+		Face: face,
+		Dot:  point,
+	}
+	d.DrawString(label)
 }

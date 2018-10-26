@@ -19,9 +19,10 @@ func main() {
 	log.Fatal(http.ListenAndServe(port, nil))
 }
 
-// drawHandler opens the plot in a browser window
+// drawHandler opens a canvas/plot in a browser window
 func drawHandler(w http.ResponseWriter, r *http.Request) {
 	canvas := plot.NewCanvas(400, 600, &color.RGBA{255, 255, 255, 255})
-	canvas.Rectangle(5, 5, 1195, 1795, 2, &color.RGBA{0, 0, 0, 255})
+	canvas.Rectangle(10, 10, 390, 590, 8, &color.RGBA{0, 0, 0, 255})
+	canvas.AddLabel(50, 50, "hello gopher!", &color.RGBA{50, 50, 50, 255})
 	canvas.EncodePNG(w)
 }
