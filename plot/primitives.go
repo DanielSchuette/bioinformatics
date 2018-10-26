@@ -1,10 +1,12 @@
 package plot
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/png"
 	"io"
+	"os"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
@@ -58,14 +60,31 @@ func NewCanvas(width, height int, bg *color.RGBA) *Canvas {
 			c.img.Set(x, y, bg)
 		}
 	}
-
 	return c
 }
 
-// EncodePNG encodes a canvas and everything that is
+// EncodePNG encodes a `Canvas' and everything that is
 // drawn on it as a .png using an `io.Writer'.
-func (c *Canvas) EncodePNG(w io.Writer) {
-	png.Encode(w, c)
+func (c *Canvas) EncodePNG(w io.Writer) error {
+	if err := png.Encode(w, c); err != nil {
+		return err
+	}
+	return nil
+}
+
+// SaveToFile saves a `Canvas' to a file at `path'. The
+// file does not need to exist (if it does, it will be
+// overwritten).
+func (c *Canvas) SaveToFile(name string) error {
+	f, err := os.Create(name)
+	if err != nil {
+		return fmt.Errorf("primitives: unable to create %s: %v", name, err)
+	}
+	defer f.Close()
+	if err := c.EncodePNG(f); err != nil {
+		return fmt.Errorf("primitives: unable to encode canvas to png: %v", err)
+	}
+	return nil
 }
 
 // Rectangle creates a rectangle with a certain outline
