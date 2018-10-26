@@ -3,6 +3,8 @@ package plot
 import (
 	"image"
 	"image/color"
+	"image/png"
+	"io"
 )
 
 // Canvas is the basis for all other drawing
@@ -56,9 +58,30 @@ func NewCanvas(width, height int, bg *color.RGBA) *Canvas {
 	return c
 }
 
-// Rectangle creates a rectangle with a certain
-// color between points (x0, y0) and (x1, y1) on
-// a `Canvas'. `outline' color and `thickness' can
-// be specified as well.
-func (c *Canvas) Rectangle(x0, y0, x1, y1, thickness int, bg, outline *color.RGBA) {
+// EncodePNG encodes a canvas and everything that is
+// drawn on it as a .png using an `io.Writer'.
+func (c *Canvas) EncodePNG(w io.Writer) {
+	png.Encode(w, c)
+}
+
+// Rectangle creates a rectangle with a certain outline
+// color between points (`x0', `y0') and (`x1', `y1') on
+// a `Canvas'. Thickness `thick' can be specified as well.
+func (c *Canvas) Rectangle(x0, y0, x1, y1, thick int, out *color.RGBA) {
+	// draw horizontal and vertical lines
+	// according to `thickness'
+	var t, x, y int
+	for t = 0; t < thick; t++ {
+		// horizontal lines
+		for x = x0; x <= x1; x++ {
+			c.Set(x, y0+t, out)
+			c.Set(x, y1-t, out)
+		}
+
+		// vertical lines
+		for y = y0; y <= y1; y++ {
+			c.Set(x0+t, y, out)
+			c.Set(x1-t, y, out)
+		}
+	}
 }
