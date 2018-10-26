@@ -7,13 +7,14 @@ import (
 	"github.com/fatih/color"
 )
 
-// package-level constants that determine certain
-// behaviors of e.g. the plotting functionality
+// Package-level constants that determine certain
+// behaviors of e.g. the plotting functionality.
 const (
 	// returns the current version of `alignmentplots'
 	Version = "0.0.1"
 
 	// constants that are used internally
+	// they are not exported
 	majorMatchIdentifier = "0"
 	minorMatchIdentifier = "x"
 	noMatchIdentifier    = "."
@@ -22,7 +23,7 @@ const (
 )
 
 // Alignment holds two protein sequences and optionally
-// their alignment matrix
+// their alignment matrix.
 type Alignment struct {
 	// sequence A will be plotted in rows
 	SeqA string
@@ -35,7 +36,7 @@ type Alignment struct {
 }
 
 // String ensures that `Alignment' implements the
-// `Stringer' interface for pretty printing
+// `Stringer' interface for pretty printing.
 func (a *Alignment) String() string {
 	var matrix string
 	if a.AlignmentMatrix != nil {
@@ -60,9 +61,9 @@ func (a *Alignment) String() string {
 }
 
 // Align populates the `AlignmentMatrix' field of an
-// `Alignment' struct
+// `Alignment' struct.
 // It must be called before an alignment plot can be
-// created
+// created.
 func (a *Alignment) Align() {
 	// initialize an empty 2-D array with correct dims
 	lenA := len(a.SeqA) /* number of rows */
@@ -93,7 +94,7 @@ func (a *Alignment) Align() {
 }
 
 // Plot creates a dot plot that visualizes the alignment
-// of two protein sequences
+// of two protein sequences.
 func (a *Alignment) Plot(title string) error {
 	// check input validity
 	if (len(a.AlignmentMatrix) == 0) ||
@@ -165,6 +166,7 @@ func (a *Alignment) Plot(title string) error {
 	return nil
 }
 
+// a helper function for colorful printing of certain delimiters
 func printWithDelimiter(delim string, col color.Attribute) {
 	color.Set(col, color.Bold)
 	fmt.Printf("%v", delim)

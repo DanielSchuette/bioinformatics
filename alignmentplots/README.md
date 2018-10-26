@@ -1,4 +1,9 @@
 # Alignment Plots Package
+
+[![GoDoc](https://godoc.org/github.com/DanielSchuette/bioinformatics/alignmentplots?status.svg)](https://godoc.org/github.com/DanielSchuette/bioinformatics/alignmentplots)
+
+## Overview
+
 Alignment plots visualize the relationship between nucleotide or amino acid sequences.
 
 ## Example
