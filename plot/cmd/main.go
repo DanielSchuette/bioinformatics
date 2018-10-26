@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"image"
 	"image/color"
 	"image/png"
 	"log"
 	"net/http"
+
+	"github.com/DanielSchuette/bioinformatics/plot"
 )
 
 const port = ":8080"
@@ -19,7 +20,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(port, nil))
 }
 
-func rect(x1, y1, x2, y2, thickness int, img *image.RGBA) {
+func rect(x1, y1, x2, y2, thickness int, img *plot.Canvas) {
 	col := color.RGBA{255, 255, 255, 255}
 
 	for t := 0; t < thickness; t++ {
@@ -38,7 +39,7 @@ func rect(x1, y1, x2, y2, thickness int, img *image.RGBA) {
 
 // handler to test
 func drawHandler(w http.ResponseWriter, r *http.Request) {
-	img := image.NewRGBA(image.Rect(0, 0, 1200, 1800))
-	rect(5, 5, 1195, 1795, 2, img)
-	png.Encode(w, img)
+	canvas := plot.NewCanvas(400, 600, &color.RGBA{255, 255, 255, 255})
+	rect(5, 5, 1195, 1795, 2, canvas)
+	png.Encode(w, canvas)
 }
