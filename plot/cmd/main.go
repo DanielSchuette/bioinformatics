@@ -14,6 +14,8 @@ const port = ":8080"
 
 var (
 	canvas   *plot.Canvas
+	height   = 600
+	width    = 800
 	saveName = "plot_test.png"
 	writer   = flag.String("w", "file", "where to draw the plot\neither one of 'browser', 'file'")
 )
@@ -23,9 +25,16 @@ func main() {
 	flag.Parse()
 
 	// create a plot
-	canvas = plot.NewCanvas(400, 600, &color.RGBA{255, 255, 255, 255})
-	canvas.Rectangle(10, 10, 390, 590, 8, &color.RGBA{0, 0, 0, 255})
-	canvas.AddLabel(50, 50, "hello gopher!", &color.RGBA{50, 50, 50, 255})
+	canvas = plot.NewCanvas(width, height, &color.RGBA{255, 255, 255, 255})
+	canvas.Rectangle(5, 5, width-5, height-5, 5, &color.RGBA{0, 0, 0, 255})
+	if err := canvas.AddAxis([]int{0}, 3, "horizontal"); err != nil {
+		log.Fatalf("error adding axis: %v\n", err)
+	}
+	if err := canvas.AddAxis([]int{0}, 3, "vertical"); err != nil {
+		log.Fatalf("error adding axis: %v\n", err)
+	}
+	canvas.AddLabel(canvas.Width/2, int(float64(canvas.Height)*0.2),
+		"hello gopher!", &color.RGBA{50, 50, 50, 255})
 
 	switch *writer {
 	case "browser":

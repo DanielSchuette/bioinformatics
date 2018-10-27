@@ -1,11 +1,13 @@
 package plot
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
 	"image/png"
 	"io"
+	"math"
 	"os"
 
 	"golang.org/x/image/font"
@@ -87,6 +89,44 @@ func (c *Canvas) SaveToFile(name string) error {
 	return nil
 }
 
+// Line draws a straight line on a `Canvas'. The line
+// will be drawn from (`x0', `y0') to (`x1', `y1') with
+// a certain thickness in pixels and a certain color.
+func (c *Canvas) Line(x0, y0, x1, y1, thick int, col *color.RGBA) error {
+	if (x0 > x1) || (y0 > y1) {
+		return errors.New("primitives: x0,y0 must be smaller than x1,y1")
+	}
+	// edge case of a purely vertical line
+	// the case of a horizontal line with
+	// slope 0 is covered by the general
+	// form of the algorithm
+	if x0 == x1 {
+		for y := y0; y <= y1; y++ {
+			for tx := -thick; tx <= thick; tx++ {
+				for ty := -thick; ty <= thick; ty++ {
+					c.Set(x0+tx, y+ty, col)
+				}
+			}
+		}
+		return nil
+	}
+
+	// calculate actual linear equation
+	slope := (float64(y1) - float64(y0)) /
+		(float64(x1) - float64(x0)) /* calculate slope of line */
+	intercept := float64(y0) -
+		(slope * float64(x0)) /* calculate intercept of line */
+	for x := x0; x <= x1; x++ {
+		y := int(math.Round((float64(x) * slope) + intercept))
+		for tx := -thick; tx <= thick; tx++ {
+			for ty := -thick; ty <= thick; ty++ {
+				c.Set(x+tx, y+ty, col)
+			}
+		}
+	}
+	return nil
+}
+
 // Rectangle creates a rectangle with a certain outline
 // color between points (`x0', `y0') and (`x1', `y1') on
 // a `Canvas'. Thickness `thick' can be specified as well.
@@ -95,6 +135,7 @@ func (c *Canvas) Rectangle(x0, y0, x1, y1, thick int, out *color.RGBA) {
 	// according to `thickness'
 	var t, x, y int
 	for t = 0; t < thick; t++ {
+		// TODO: replace with `Line' implementation
 		// horizontal lines
 		for x = x0; x <= x1; x++ {
 			c.Set(x, y0+t, out)
