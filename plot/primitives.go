@@ -96,6 +96,7 @@ func (c *Canvas) Line(x0, y0, x1, y1, thick int, col *color.RGBA) error {
 	if (x0 > x1) || (y0 > y1) {
 		return errors.New("primitives: x0,y0 must be smaller than x1,y1")
 	}
+
 	// edge case of a purely vertical line
 	// the case of a horizontal line with
 	// slope 0 is covered by the general
@@ -154,6 +155,7 @@ func (c *Canvas) Rectangle(x0, y0, x1, y1, thick int, out *color.RGBA) {
 // of a `Canvas'. Currently, only a fixed-size font is
 // implemented (`basicfont.Face7x13').
 func (c *Canvas) AddLabel(x, y int, label string, col *color.RGBA) {
+	// TODO: add a variable-size font
 	point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
 	face := basicfont.Face7x13 /* fixed-size font */
 	d := &font.Drawer{
